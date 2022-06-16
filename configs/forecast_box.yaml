@@ -1,0 +1,51 @@
+_BASE_: "mask_rcnn_R_50_FPN.yaml"
+MODEL:
+  META_ARCHITECTURE: "JointPanopticForecast"
+  WEIGHTS: "detectron2://Cityscapes/mask_rcnn_R_50_FPN/142423278/model_final_af9cf5.pkl"
+  FORECAST_LEN: 3
+  ODOM_MEAN: [6.2783e+00, 1.8357e-03, 3.2054e-01, 1.9058e-05, 9.2651e-05]
+  ODOM_STD:  [3.5678e+00, 6.2480e-02, 2.6960e-01, 2.3288e-03, 3.5222e-03]
+  USE_PRE_NORM: True
+  KEY_MODE: diff_concat
+  VALUE_MODE: diff_concat
+  USE_SAVED_FEAT_MODE: True
+  FIX_TRANSFORMER_INIT: True
+  USE_DEPTHS: True
+  DEPTH_LOSS_COEF: 10.0
+  USE_CLASS_INP: True
+  ROI_HEADS:
+    NAME: JointPanopticForecastROIHeads
+    SCORE_THRESH_TEST: 0.85
+  TRAJECTORY_ENCODER:
+    USE_ODOM: True
+    BOX_EMBED_SIZE: 256
+    FEAT_CHANNELS: 256
+    ATTENTION_MODULE: difference_general
+    PREDICT_VEL: True
+    IS_AGENT_AWARE: True
+  TRAJECTORY_DECODER:
+    USE_ODOM: True
+    ATTENTION_MODULE: difference_general
+    IS_AGENT_AWARE: True
+    PREDICT_PRESENCE: True
+  PRESENCE_LOSS_COEF: 10.0
+  IOU_COEF: 100.0
+  SUB_BATCH_SIZE: 1
+INPUT:
+  MIN_SIZE_TRAIN: (1024,)
+  SEQ_LEN: 6
+  SEQ_INTERVAL: 3
+  TARGET_FRAME_RANGE: [15, 30]
+  USE_ID: True
+SOLVER:
+  OPTIMIZER: "ADAM"
+  BASE_LR: 1.0e-4
+  STEPS: (36000,)
+  MAX_ITER: 48000
+  IMS_PER_BATCH: 8
+TEST:
+  EVAL_PERIOD: 10000000000
+  LOSS_EVAL_PERIOD: 2000
+DATASETS:
+  TRAIN: ("cityscapes_fine_saved_feats_train",)
+  TEST: ("cityscapes_fine_saved_feats_val",)
