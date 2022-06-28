@@ -29,7 +29,10 @@ There are three steps that can be run in the current version of this code:
 2) training the box forecasting model
 3) training the appearance forecasting model
 
-COMING SOON: the steps required to train the refinement head. This includes a large amount of data preprocessing, and this is coming soon!
+Training the prediction refinement head includes a large amount of data preprocessing, and an attempt at packaging this code in a manner that can be run by other people is underway. The model code is included and can be read through.
+
+## Model Predictions
+Due to the large amount of compute time and disk space required to prepare data for the prediction refinement head to run, it will not be practical for most people. To facilitate comparisons between our approach, we have included the final model panoptic segmentation outputs for the short- and mid-term settings on Cityscapes in the `predictions/` folder.
 
 ## ✏️ 📄 Citation
 
